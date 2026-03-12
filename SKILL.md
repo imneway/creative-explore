@@ -29,22 +29,39 @@ If the user provides a Feishu/Lark wiki URL, extract `document_id` from `larksui
 
 The first round is about **breadth and inspiration**.
 
-1. **Brainstorm 5+ creative directions** as text. Each needs:
+1. **Brainstorm 7+ creative directions** as text. Each needs:
    - A short bilingual name (e.g. "Tessellation Wave (镶嵌波)")
    - A 1-2 sentence concept description
    - How it connects to the brief's keywords
 
    Push beyond the obvious. Consider metaphors, abstract interpretations, cultural references, unexpected visual approaches.
 
-2. **Auto-attach brand assets**: Based on the brief and the brand assets you inventoried, select the most relevant assets (patterns, textures, icons) and automatically use them as style references via edit mode. No need to ask — if the workspace has brand assets that match the visual language described in the brand rules, use them by default.
+2. **Vary reference inputs across directions** — maximize divergence by using different reference combos. Adapt the allocation based on what's available:
 
-3. **Generate quick drafts** using `nano-banana-2` for speed. One image per direction.
+   **With user refs + brand assets (typical case, 7 directions):**
+   - ~3: user ref + different brand asset each (Pattern 01, 03, Icons, etc.) → edit mode
+   - ~2: user ref only OR brand asset only → edit mode
+   - ~2: no references at all → text-to-image mode
 
-4. **Present in HTML preview** and open in browser.
+   **With user refs but no brand assets:**
+   - ~4: user ref → edit mode
+   - ~3: no references → text-to-image mode
+
+   **With brand assets but no user refs:**
+   - ~4: different brand asset each → edit mode
+   - ~3: no references → text-to-image mode
+
+   **Multiple user refs (2+):** Reduce brand asset usage — the user's refs already provide variety. Mix different user refs across directions. Use ~1-2 pure text-to-image for baseline.
+
+   **No refs and no assets:** All text-to-image mode.
+
+3. **Generate quick drafts** using `nano-banana-2`. Use edit mode for directions with references, `generate.sh` for pure text-to-image. One image per direction. Run all in parallel.
+
+4. **Present in HTML preview** using the data-driven template (see HTML Preview). Just write a JSON data file — the template renders it instantly.
 
 5. **Archive** the round.
 
-6. Ask: "Which directions do you want to explore further? Or want me to try new ones?"
+6. **Summarize** what reference combos were used for each direction, then ask: "Which directions to explore further? And for next round, do you want more/fewer reference-guided vs pure-prompt directions?"
 
 ### Subsequent Rounds: Converge or Diverge
 
@@ -150,22 +167,40 @@ You need a fal.ai API key:
 
 ## HTML Preview
 
-After generating images, create an HTML preview page at `/tmp/creative-explore/round{N}.html`.
+Use the data-driven template at `references/preview-template.html`. Speed is critical — don't hand-write HTML for each round. Instead:
 
-### Styling rules
+1. Write a JSON data file to `/tmp/creative-explore/data.js`
+2. Copy the template to `/tmp/creative-explore/index.html` (once per session)
+3. Open in browser — the template renders everything from the JSON
 
-- **Default**: Clean neutral gray (`#f5f5f5` background, `#333` text, `#666` accents) — no brand colors unless detected
-- **With brand**: If brand rules define primary/accent colors, use them for direction titles, labels, and accent elements. Extract during setup and apply throughout
-- `<meta charset="UTF-8">` — always required
-- Include Figma capture script: `<script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>`
+### Writing the data file
 
-### Card layout for each direction
+```javascript
+// /tmp/creative-explore/data.js
+const DATA = {
+  title: "Brand - Task Title",
+  subtitle: "Round N | context",
+  accent: "#935BFF",  // brand color or "#666" for neutral
+  colors: ["#935BFF", "#C4B5FF", "#D8D0FF"],  // optional brand palette
+  directions: [
+    {
+      name: "1. Direction Name (中文名)",
+      meta: "edit mode | User ref + Pattern 01",
+      desc: "One sentence concept description.",
+      image: "https://...generated.png",
+      model: "nano-banana-2/edit",
+      inputs: [
+        { url: "https://...ref.jpg", label: "User ref: style" },
+        { url: "https://...pattern.png", label: "Pattern 01" }
+      ],
+      prompt: "The full prompt used..."
+    }
+    // ... more directions
+  ]
+};
+```
 
-Each direction card must include:
-1. **Generated image** (full width)
-2. **Model name** label
-3. **Input/reference images** as thumbnails (height ~60px) above or beside the prompt box — so the user can see what was fed into the model and easily copy these URLs to try on other platforms
-4. **Full prompt** in a monospace box — the user needs this to iterate
+For directions with no reference images, set `inputs: []` and add `model: "nano-banana-2 (text-to-image)"`.
 
 ### Serve locally
 
