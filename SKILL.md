@@ -5,71 +5,131 @@ description: Iterative creative exploration for generating brand-compliant marke
 
 # Creative Exploration
 
-Generate brand-compliant marketing and operational images through iterative creative exploration. Read the brand rules, understand the brief, brainstorm creative directions, generate quick drafts, iterate with the user, and archive results.
+Generate brand-compliant marketing and operational images through iterative creative exploration.
+
+## Conversation Style
+
+Be concise, friendly, and professional. Don't over-explain. Guide the user forward with short, clear questions at natural decision points: "Which directions do you want to take further?" / "Want to try with reference images this time?"
 
 ## Setup
 
-On the first use in a session, establish the workspace:
+On the first use in a session:
 
-1. **Workspace path** — Ask: "Is the current directory your project workspace? If not, please provide the path." The workspace is where brand rules, assets, and output archives live (often in a shared Dropbox).
-2. **Brand rules** — Look for a brand rules markdown file in the workspace (e.g. `*-Brand-Rules.md`). Read it thoroughly — it defines colors, typography, visual language, and constraints that every generated image must follow. Pay special attention to any AI-specific prompt guidelines in the rules.
-3. **Brand assets** — Scan the workspace `assets/` directory to understand available reference images, patterns, icons, and logos.
-4. **Task requirements** — Prompt the user to provide:
-   - The brief (what needs to be created, dimensions, format)
-   - Task requirements doc if available (Feishu/Lark URL, or paste directly)
-   - Any additional style reference images they want to incorporate
-   - Text requirements or key messages
+1. **Workspace path** — Ask: "Is the current directory your project workspace? If not, please tell me the path."
+2. **Brand rules** — Look for a brand rules markdown file (e.g. `*-Brand-Rules.md`). Read it thoroughly — colors, typography, visual language, constraints, and any AI prompt guidelines.
+3. **Brand assets** — Scan the `assets/` directory. Read each image to understand what's available (patterns, icons, logos, illustrations). Build a mental inventory — you'll use these automatically later.
+4. **Brand colors** — Extract the primary brand colors from the rules for use in the HTML preview.
+5. **Task requirements** — Ask the user for the brief. Also let them know: "You can also share a task requirements doc (Feishu/Lark URL works), reference images, or any style notes."
 
-If the user provides a Feishu/Lark wiki URL, extract the `document_id` from the URL pattern `larksuite.com/wiki/{document_id}` and read it with `mcp__claude_ai_Feishu__read_document_content`.
+If the user provides a Feishu/Lark wiki URL, extract `document_id` from `larksuite.com/wiki/{document_id}` and read with `mcp__claude_ai_Feishu__read_document_content`.
 
 ## Workflow
 
 ### Round 1: Divergent Exploration
 
-The first round is about **breadth and inspiration**. Think creatively and propose directions the user might not have considered.
+The first round is about **breadth and inspiration**.
 
-1. **Brainstorm 5+ creative directions** as text first. Each direction needs:
+1. **Brainstorm 5+ creative directions** as text. Each needs:
    - A short bilingual name (e.g. "Tessellation Wave (镶嵌波)")
    - A 1-2 sentence concept description
-   - How it connects to the brief's keywords/themes
+   - How it connects to the brief's keywords
 
-   Push beyond the obvious — the goal is to spark ideas and expand the user's thinking. Consider metaphors, abstract interpretations, cultural references, and unexpected visual approaches.
+   Push beyond the obvious. Consider metaphors, abstract interpretations, cultural references, unexpected visual approaches.
 
-2. **Generate quick drafts** for all directions using `nano-banana-2` (fast and cheap — ideal for divergent exploration). One image per direction is enough at this stage.
+2. **Auto-attach brand assets**: Based on the brief and the brand assets you inventoried, select the most relevant assets (patterns, textures, icons) and automatically use them as style references via edit mode. No need to ask — if the workspace has brand assets that match the visual language described in the brand rules, use them by default.
 
-3. **Present in HTML preview** (see HTML Preview section below) and open in browser.
+3. **Generate quick drafts** using `nano-banana-2` for speed. One image per direction.
 
-4. **Archive** the round (see Archive section below).
+4. **Present in HTML preview** and open in browser.
+
+5. **Archive** the round.
+
+6. Ask: "Which directions do you want to explore further? Or want me to try new ones?"
 
 ### Subsequent Rounds: Converge or Diverge
 
-Based on user feedback, either:
+Based on user feedback:
 
-- **Continue diverging**: Explore new directions, variations, or combinations of what worked
-- **Converge**: Focus on selected directions, refine prompts, and suggest upgrading to higher-quality models:
-  - `gpt-image-1.5` — better detail and composition control
-  - `nano-banana-pro` — higher fidelity than nano-banana-2
-  - `nano-banana-2/edit` — when the user wants to incorporate style reference images from brand assets
+- **Diverge further**: New directions, variations, or mashups of what worked
+- **Converge**: Focus on selected directions, refine prompts. Suggest upgrading model for quality — "These directions look solid. Want to try GPT Image or Nano Banana Pro for higher quality?"
 
-Each round builds on the previous one. Keep the creative momentum going.
+## Model Registry
 
-## Image Generation
+When the user mentions a model by casual name, map it to the correct fal.ai model ID:
 
-Depends on the `fal-generate` skill. Scripts are at `~/.claude/skills/fal-generate/scripts/`.
+| User says | Model ID | Size values | Notes |
+|---|---|---|---|
+| "nano banana", "nb2", "fast" | `fal-ai/nano-banana-2` | `landscape_4_3`, `square`, `portrait_4_3` | Default for Round 1 (fast, cheap) |
+| "nano banana pro", "nb pro", "pro" | `fal-ai/nano-banana-pro` | `landscape_4_3`, `square`, `portrait_4_3` | Higher fidelity |
+| "gpt", "gpt image", "openai" | `fal-ai/gpt-image-1.5` | `1536x1024`, `1024x1024`, `1024x1536` | Best detail/composition |
+| "edit", "with reference" | `fal-ai/nano-banana-2/edit` | `aspect_ratio`: "16:9", "4:3", "1:1" | Style/element reference mode |
 
-### FAL_KEY Setup
-
-The `$FAL_KEY` environment variable should be set in the user's shell profile (e.g. `~/.zshrc`). If it's not set, guide the user:
-```
-To use image generation, you need a fal.ai API key:
-1. Sign up at https://fal.ai and get your API key
-2. Add to your ~/.zshrc: export FAL_KEY="your_key_here"
-3. Run: source ~/.zshrc
+If a new model version exists (e.g. user says "latest gpt"), use `search-models.sh` to look it up:
+```bash
+bash ~/.claude/skills/fal-generate/scripts/search-models.sh --category "text-to-image"
 ```
 
-### Text-to-Image (no reference images)
+## Reference Image Handling
 
-Use `generate.sh` with queue mode (the default).
+Users may provide one or more reference images. Each image can serve a different purpose — don't assume they're all style references.
+
+### Determine reference intent
+
+If the user doesn't specify how to use their reference images, make a smart judgment based on the image content:
+
+- **Brand pattern / texture / abstract graphic** → Style reference (color palette, visual language)
+- **Photo / scene / composition** → Composition or mood reference
+- **Logo / mascot / specific object** → Element to embed in the composition
+- **Another design / poster** → Layout and style reference
+
+If ambiguous, ask briefly: "Image A looks like a style reference, image B is a mascot — should I use A for style and embed B into the composition?"
+
+### Prompt patterns for each reference type
+
+**Style reference** — extract visual language, don't reproduce:
+```
+Use the attached image ONLY as style reference for [color palette / geometric language / texture style]. Do NOT reproduce it. Create a new original composition: [prompt]
+```
+
+**Element / object to embed** — incorporate the specific object:
+```
+The attached image contains a [mascot / logo / product]. Incorporate this [element] prominently into the composition: [prompt]
+```
+
+**Composition / layout reference** — follow structure:
+```
+Use the attached image as a layout reference. Follow its general composition and spatial arrangement, but create original visuals in the brand style: [prompt]
+```
+
+**Mixed references** — when multiple images serve different roles, describe each:
+```
+Image 1 is a style reference for color palette and triangular geometric language — extract the style but do NOT copy it. Image 2 contains a mascot character — embed it into the scene. Create a new composition: [prompt]
+```
+
+### Technical rules for edit mode
+
+- **Sync only**: Use `fal.run`, never `queue.fal.run` — queue returns HTTP 405 for edit endpoints
+- **Set aspect_ratio explicitly**: Default is 1:1, always specify (e.g. "16:9", "4:3")
+- Upload local files first with `upload.sh`, cache CDN URLs for the session
+
+```bash
+# Upload
+bash ~/.claude/skills/fal-generate/scripts/upload.sh --file "/path/to/image.png"
+
+# Generate with references
+curl -s -X POST "https://fal.run/fal-ai/nano-banana-2/edit" \
+  -H "Authorization: Key $FAL_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "prompt": "[reference instructions + actual prompt]",
+    "image_urls": ["https://...ref1.png", "https://...ref2.png"],
+    "aspect_ratio": "16:9",
+    "resolution": "1K",
+    "num_images": 1
+  }'
+```
+
+## Text-to-Image (no references)
 
 ```bash
 bash ~/.claude/skills/fal-generate/scripts/generate.sh \
@@ -78,86 +138,66 @@ bash ~/.claude/skills/fal-generate/scripts/generate.sh \
   --size landscape
 ```
 
-Model-specific size values:
-- `nano-banana-2`, `nano-banana-pro`: `landscape_4_3`, `square`, `portrait_4_3`
-- `gpt-image-1.5`: must use exact pixels — `1536x1024`, `1024x1024`, `1024x1536`
+## FAL_KEY Setup
 
-### Edit Mode (with style reference images)
-
-When the user wants to reference brand assets or mood boards for style, use the edit endpoint. This is a direct curl call because **the edit endpoint only supports sync mode** (`fal.run`), not the queue endpoint.
-
-```bash
-curl -s -X POST "https://fal.run/fal-ai/nano-banana-2/edit" \
-  -H "Authorization: Key $FAL_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "prompt": "Use the attached images ONLY as style reference for color palette and visual language. Do NOT reproduce them. Create a new original composition: [actual prompt here]",
-    "image_urls": ["https://...ref1.png", "https://...ref2.png"],
-    "aspect_ratio": "16:9",
-    "resolution": "1K",
-    "num_images": 1
-  }'
+`$FAL_KEY` should be set in the user's shell profile. If missing, guide:
 ```
-
-Critical rules for edit mode:
-- **Style reference disclaimer**: Always start the prompt with "Use the attached images ONLY as style reference for [what to reference]. Do NOT reproduce them. Create a new original composition:" — without this, the model tends to copy the reference images rather than extracting style
-- **Sync only**: Use `fal.run`, never `queue.fal.run` — the queue endpoint returns HTTP 405 for edit models
-- **Set aspect_ratio explicitly**: Default is 1:1, so always specify (e.g. "16:9", "4:3", "1:1")
-- Upload local files first with `upload.sh`, cache the returned CDN URLs for the session
-
-### Uploading Local Files
-
-```bash
-bash ~/.claude/skills/fal-generate/scripts/upload.sh --file "/path/to/image.png"
+You need a fal.ai API key:
+1. Sign up at https://fal.ai
+2. Add to ~/.zshrc: export FAL_KEY="your_key_here"
+3. Run: source ~/.zshrc
 ```
-
-Returns a fal CDN URL. Cache it — don't re-upload the same file within a session.
 
 ## HTML Preview
 
-After generating images, create an HTML preview page. This is the primary way the user evaluates results.
+After generating images, create an HTML preview page at `/tmp/creative-explore/round{N}.html`.
 
-Write the HTML to `/tmp/creative-explore/round{N}.html`.
+### Styling rules
 
-Requirements:
-- `<meta charset="UTF-8">` — without this, CJK characters and special symbols display as garbled text
-- Include Figma capture script: `<script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>` (enables optional Figma import)
-- Show reference images at top if any were used
-- Each direction gets a card with: generated image, model name, and **the full prompt in a monospace box** — the user needs to see the exact prompt to know what to tweak
-- Clean, readable layout with brand accent colors
+- **Default**: Clean neutral gray (`#f5f5f5` background, `#333` text, `#666` accents) — no brand colors unless detected
+- **With brand**: If brand rules define primary/accent colors, use them for direction titles, labels, and accent elements. Extract during setup and apply throughout
+- `<meta charset="UTF-8">` — always required
+- Include Figma capture script: `<script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>`
 
-See `references/html-template.md` for the template structure.
+### Card layout for each direction
+
+Each direction card must include:
+1. **Generated image** (full width)
+2. **Model name** label
+3. **Input/reference images** as thumbnails (height ~60px) above or beside the prompt box — so the user can see what was fed into the model and easily copy these URLs to try on other platforms
+4. **Full prompt** in a monospace box — the user needs this to iterate
+
+### Serve locally
 
 ```bash
 mkdir -p /tmp/creative-explore
-# Write HTML file...
 cd /tmp/creative-explore && python3 -m http.server 8899 &
 open "http://localhost:8899/round{N}.html"
 ```
 
+See `references/html-template.md` for the base template.
+
 ## Archive
 
-After each round, save outputs to the workspace:
+After each round, save to the workspace:
 
 ```
 {workspace}/{brand or project name}/{yyyy-mm-dd}-{task title}/round{N}/
 ```
 
-Copy both:
-- Images: download from fal CDN URLs using `curl -o`
-- The HTML preview file
+Download images from fal CDN with `curl -o` and copy the HTML preview file.
 
 ## Prompt Writing Patterns
 
-Adapt these patterns to the specific brand's visual language (always read the brand rules first):
+Adapt to the brand's visual language (read the brand rules first):
 
-- **Context first**: Start with what the image is for — "Abstract [concept] for a [context], [background description]"
-- **Brand colors by hex**: AI models respond well to specific hex codes in prompts
-- **Explicit constraints at the end**: "No text, no logos, no people. [mood adjectives]."
-- **Layout guidance**: "Left side with generous whitespace for text placement" (if the design needs text overlay space)
-- **Bilingual direction names**: Help multilingual teams communicate — "Gateway (门户)", "Constellation (星座)"
+- **Context first**: "Abstract [concept] for a [context], [background description]"
+- **Brand colors by hex**: Models respond well to specific hex codes
+- **Constraints at the end**: "No text, no logos, no people. [mood adjectives]."
+- **Layout**: "Left side with generous whitespace for text placement"
+- **Bilingual names**: Help multilingual teams — "Gateway (门户)", "Constellation (星座)"
 
 Common pitfalls:
-- Relying on text description alone without referencing the brand's actual visual assets — use edit mode with reference images when available
-- Forgetting to specify background lightness — many models default to dramatic dark backgrounds
-- Over-describing — shorter, focused prompts often produce better results than exhaustive descriptions
+- Not using available brand assets as references — always check the assets directory first
+- Forgetting to specify background lightness — many models default to dark
+- Over-describing — shorter, focused prompts often work better
