@@ -1,0 +1,260 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a1a"/>
+      <stop offset="50%" style="stop-color:#0d1a33"/>
+      <stop offset="100%" style="stop-color:#0a1628"/>
+    </linearGradient>
+
+    <linearGradient id="goldStream" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FFB800;stop-opacity:0"/>
+      <stop offset="50%" style="stop-color:#FFD700"/>
+      <stop offset="100%" style="stop-color:#FFB800;stop-opacity:0"/>
+    </linearGradient>
+
+    <linearGradient id="blueStream" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0066FF;stop-opacity:0"/>
+      <stop offset="50%" style="stop-color:#00A8FF"/>
+      <stop offset="100%" style="stop-color:#0066FF;stop-opacity:0"/>
+    </linearGradient>
+
+    <linearGradient id="tealStream" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00D4AA;stop-opacity:0"/>
+      <stop offset="50%" style="stop-color:#00FFD4"/>
+      <stop offset="100%" style="stop-color:#00D4AA;stop-opacity:0"/>
+    </linearGradient>
+
+    <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:0.8"/>
+      <stop offset="40%" style="stop-color:#0066FF;stop-opacity:0.4"/>
+      <stop offset="100%" style="stop-color:#0066FF;stop-opacity:0"/>
+    </radialGradient>
+
+    <radialGradient id="nodeGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1"/>
+      <stop offset="30%" style="stop-color:#00D4AA;stop-opacity:0.8"/>
+      <stop offset="100%" style="stop-color:#00D4AA;stop-opacity:0"/>
+    </radialGradient>
+
+    <!-- Filters -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="softGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Asian Pattern -->
+    <pattern id="asianLattice" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M30 0 L60 30 L30 60 L0 30 Z" fill="none" stroke="#0066FF" stroke-width="0.5" opacity="0.15"/>
+      <circle cx="30" cy="30" r="2" fill="#0066FF" opacity="0.1"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="800" fill="url(#bgGrad)"/>
+  <rect width="1200" height="800" fill="url(#asianLattice)"/>
+
+  <!-- Stars / Data Particles -->
+  <g fill="#ffffff" opacity="0.3">
+    <circle cx="100" cy="100" r="1"/>
+    <circle cx="250" cy="50" r="0.8"/>
+    <circle cx="400" cy="120" r="1.2"/>
+    <circle cx="550" cy="80" r="0.6"/>
+    <circle cx="700" cy="140" r="1"/>
+    <circle cx="850" cy="60" r="0.8"/>
+    <circle cx="1000" cy="100" r="1.1"/>
+    <circle cx="1100" cy="150" r="0.7"/>
+    <circle cx="150" cy="650" r="0.9"/>
+    <circle cx="300" cy="700" r="1"/>
+    <circle cx="500" cy="680" r="0.8"/>
+    <circle cx="800" cy="720" r="1.2"/>
+    <circle cx="950" cy="650" r="0.6"/>
+    <circle cx="1050" cy="700" r="1"/>
+  </g>
+
+  <!-- City Skylines -->
+  <!-- Hong Kong (Left) -->
+  <g transform="translate(80, 500)" opacity="0.7">
+    <rect x="0" y="60" width="15" height="80" fill="#0066FF" opacity="0.4"/>
+    <rect x="20" y="40" width="12" height="100" fill="#00D4AA" opacity="0.5"/>
+    <rect x="38" y="20" width="18" height="120" fill="#0066FF" opacity="0.6"/>
+    <rect x="62" y="50" width="14" height="90" fill="#FFB800" opacity="0.4"/>
+    <rect x="82" y="70" width="10" height="70" fill="#0066FF" opacity="0.3"/>
+    <!-- ICC Tower silhouette -->
+    <polygon points="45,0 55,0 58,20 42,20" fill="#00D4AA" opacity="0.7"/>
+  </g>
+
+  <!-- Singapore (Center-Left) -->
+  <g transform="translate(280, 520)" opacity="0.7">
+    <rect x="0" y="50" width="12" height="70" fill="#0066FF" opacity="0.4"/>
+    <rect x="18" y="30" width="16" height="90" fill="#00D4AA" opacity="0.5"/>
+    <!-- Marina Bay Sands -->
+    <rect x="40" y="60" width="10" height="60" fill="#FFB800" opacity="0.5"/>
+    <rect x="55" y="60" width="10" height="60" fill="#FFB800" opacity="0.5"/>
+    <rect x="70" y="60" width="10" height="60" fill="#FFB800" opacity="0.5"/>
+    <path d="M35 58 Q60 40 85 58" fill="none" stroke="#FFB800" stroke-width="3" opacity="0.6"/>
+    <ellipse cx="60" cy="50" rx="30" ry="8" fill="#FFB800" opacity="0.4"/>
+  </g>
+
+  <!-- Tokyo (Center-Right) -->
+  <g transform="translate(780, 510)" opacity="0.7">
+    <rect x="0" y="70" width="12" height="60" fill="#0066FF" opacity="0.4"/>
+    <rect x="18" y="40" width="14" height="90" fill="#00D4AA" opacity="0.5"/>
+    <!-- Tokyo Tower -->
+    <polygon points="45,0 50,90 40,90" fill="#FF4757" opacity="0.6"/>
+    <rect x="60" y="50" width="16" height="80" fill="#0066FF" opacity="0.5"/>
+    <rect x="82" y="60" width="10" height="70" fill="#FFB800" opacity="0.4"/>
+  </g>
+
+  <!-- Shanghai (Right) -->
+  <g transform="translate(1000, 490)" opacity="0.7">
+    <rect x="0" y="80" width="14" height="50" fill="#0066FF" opacity="0.4"/>
+    <rect x="20" y="50" width="12" height="80" fill="#00D4AA" opacity="0.5"/>
+    <!-- Oriental Pearl Tower -->
+    <line x1="50" y1="0" x2="50" y2="130" stroke="#FF4757" stroke-width="2" opacity="0.7"/>
+    <circle cx="50" cy="30" r="12" fill="none" stroke="#FF4757" stroke-width="2" opacity="0.6"/>
+    <circle cx="50" cy="70" r="8" fill="none" stroke="#FF4757" stroke-width="2" opacity="0.5"/>
+    <rect x="70" y="40" width="18" height="90" fill="#0066FF" opacity="0.6"/>
+    <polygon points="79,10 79,40 88,40" fill="#0066FF" opacity="0.5"/>
+  </g>
+
+  <!-- Seoul (Far Right) -->
+  <g transform="translate(1120, 530)" opacity="0.6">
+    <rect x="0" y="50" width="10" height="60" fill="#0066FF" opacity="0.4"/>
+    <rect x="15" y="30" width="12" height="80" fill="#00D4AA" opacity="0.5"/>
+    <!-- Lotte Tower silhouette -->
+    <polygon points="35,0 45,110 25,110" fill="#0066FF" opacity="0.6"/>
+  </g>
+
+  <!-- Network Streams -->
+  <g filter="url(#glow)">
+    <!-- Main routes -->
+    <path d="M100 550 Q300 300 600 350" stroke="url(#goldStream)" stroke-width="3" fill="none" opacity="0.8">
+      <animate attributeName="stroke-dasharray" values="0 2000;2000 0" dur="3s" repeatCount="indefinite"/>
+    </path>
+    <path d="M300 560 Q500 250 600 350" stroke="url(#blueStream)" stroke-width="2.5" fill="none" opacity="0.7">
+      <animate attributeName="stroke-dasharray" values="0 1500;1500 0" dur="2.5s" repeatCount="indefinite"/>
+    </path>
+    <path d="M600 350 Q750 200 850 520" stroke="url(#tealStream)" stroke-width="2.5" fill="none" opacity="0.7">
+      <animate attributeName="stroke-dasharray" values="0 1500;1500 0" dur="2.8s" repeatCount="indefinite"/>
+    </path>
+    <path d="M600 350 Q900 180 1050 500" stroke="url(#goldStream)" stroke-width="2" fill="none" opacity="0.6">
+      <animate attributeName="stroke-dasharray" values="0 1800;1800 0" dur="3.2s" repeatCount="indefinite"/>
+    </path>
+    <path d="M600 350 Q950 300 1150 540" stroke="url(#blueStream)" stroke-width="2" fill="none" opacity="0.5">
+      <animate attributeName="stroke-dasharray" values="0 1600;1600 0" dur="2.7s" repeatCount="indefinite"/>
+    </path>
+
+    <!-- Secondary connections -->
+    <path d="M150 520 Q400 400 600 350" stroke="#0066FF" stroke-width="1" fill="none" opacity="0.3"/>
+    <path d="M350 530 Q480 380 600 350" stroke="#00D4AA" stroke-width="1" fill="none" opacity="0.3"/>
+    <path d="M600 350 Q700 450 830 520" stroke="#FFB800" stroke-width="1" fill="none" opacity="0.3"/>
+    <path d="M600 350 Q800 400 1020 510" stroke="#0066FF" stroke-width="1" fill="none" opacity="0.3"/>
+  </g>
+
+  <!-- Central Exchange Node -->
+  <g transform="translate(600, 350)" filter="url(#softGlow)">
+    <!-- Outer rings -->
+    <circle r="80" fill="none" stroke="#0066FF" stroke-width="1" opacity="0.3">
+      <animate attributeName="r" values="80;90;80" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="60" fill="none" stroke="#00D4AA" stroke-width="1" opacity="0.4">
+      <animate attributeName="r" values="60;70;60" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="40" fill="none" stroke="#FFB800" stroke-width="1.5" opacity="0.5">
+      <animate attributeName="r" values="40;50;40" dur="2.5s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Core glow -->
+    <circle r="50" fill="url(#centerGlow)"/>
+
+    <!-- Inner geometric pattern -->
+    <polygon points="0,-25 21.65,12.5 -21.65,12.5" fill="none" stroke="#FFD700" stroke-width="2" opacity="0.8"/>
+    <polygon points="0,25 -21.65,-12.5 21.65,-12.5" fill="none" stroke="#FFD700" stroke-width="2" opacity="0.8"/>
+
+    <!-- Center point -->
+    <circle r="8" fill="#ffffff" opacity="0.9"/>
+    <circle r="4" fill="#FFD700"/>
+  </g>
+
+  <!-- City Node Points -->
+  <g filter="url(#glow)">
+    <!-- Hong Kong -->
+    <circle cx="130" cy="540" r="6" fill="url(#nodeGlow)"/>
+    <circle cx="130" cy="540" r="3" fill="#00D4AA"/>
+
+    <!-- Singapore -->
+    <circle cx="330" cy="560" r="6" fill="url(#nodeGlow)"/>
+    <circle cx="330" cy="560" r="3" fill="#FFB800"/>
+
+    <!-- Tokyo -->
+    <circle cx="830" cy="530" r="6" fill="url(#nodeGlow)"/>
+    <circle cx="830" cy="530" r="3" fill="#FF4757"/>
+
+    <!-- Shanghai -->
+    <circle cx="1050" cy="520" r="6" fill="url(#nodeGlow)"/>
+    <circle cx="1050" cy="520" r="3" fill="#0066FF"/>
+
+    <!-- Seoul -->
+    <circle cx="1150" cy="560" r="5" fill="url(#nodeGlow)"/>
+    <circle cx="1150" cy="560" r="2.5" fill="#00D4AA"/>
+  </g>
+
+  <!-- Floating Data Particles -->
+  <g fill="#ffffff" opacity="0.6">
+    <circle cx="200" cy="400" r="2">
+      <animate attributeName="cy" values="400;380;400" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6;0.2;0.6" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="450" cy="320" r="1.5">
+      <animate attributeName="cy" values="320;300;320" dur="2.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="750" cy="280" r="2">
+      <animate attributeName="cy" values="280;260;280" dur="2.8s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="900" cy="350" r="1.5">
+      <animate attributeName="cy" values="350;330;350" dur="3.2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="500" cy="450" r="1.8">
+      <animate attributeName="cy" values="450;430;450" dur="2.6s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="700" cy="420" r="1.5">
+      <animate attributeName="cy" values="420;400;420" dur="2.9s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Asian Pattern Frame Elements -->
+  <g stroke="#0066FF" fill="none" opacity="0.15">
+    <!-- Top corners -->
+    <path d="M40 40 L80 40 L80 60 M40 40 L40 80 L60 80"/>
+    <path d="M1160 40 L1120 40 L1120 60 M1160 40 L1160 80 L1140 80"/>
+    <!-- Bottom corners -->
+    <path d="M40 760 L80 760 L80 740 M40 760 L40 720 L60 720"/>
+    <path d="M1160 760 L1120 760 L1120 740 M1160 760 L1160 720 L1140 720"/>
+  </g>
+
+  <!-- Decorative dots along edges -->
+  <g fill="#0066FF" opacity="0.2">
+    <circle cx="200" cy="40" r="2"/>
+    <circle cx="400" cy="40" r="2"/>
+    <circle cx="600" cy="40" r="2"/>
+    <circle cx="800" cy="40" r="2"/>
+    <circle cx="1000" cy="40" r="2"/>
+    <circle cx="200" cy="760" r="2"/>
+    <circle cx="400" cy="760" r="2"/>
+    <circle cx="600" cy="760" r="2"/>
+    <circle cx="800" cy="760" r="2"/>
+    <circle cx="1000" cy="760" r="2"/>
+  </g>
+</svg>
